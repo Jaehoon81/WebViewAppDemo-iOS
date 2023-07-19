@@ -1,0 +1,6 @@
+framework module TAKUUID {
+  umbrella header "TAKUUID-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,182 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.25, user-scalable=no, maximum-scale=1.25, minimum-scale=1.0">
+        
+        <meta name="format-detection" content="telephone=no">
+        
+        <script type="text/javascript">
+            function openPopupWindow() {
+                let popupUrl = "https://www.bing.com";
+                let popupOptions = "top=0, left=0, width=600, height=800, menubar=no, toolbar=no, scrollbars=yes, status=no, resizable=no";
+                
+<!--                window.open(popupUrl, '_blank', popupOptions);-->
+                window.open(popupUrl, '_blank');
+            }
+            
+            function checkMobileType() {
+                var userAgent = navigator.userAgent.toLowerCase();
+                
+                if (userAgent.indexOf('iphone') > -1 || userAgent.indexOf('ipad') > -1 || userAgent.indexOf('ipod') > -1) {
+                    return "ios";
+                } else if (userAgent.indexOf('android') > -1) {
+                    return "android";
+                } else {
+                    return "other";
+                }
+            }
+            function getUuidV4() {
+                return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = (c == "x") ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+            
+            function buttonClick(btn) {
+                var mobileType = checkMobileType();
+                
+                if (btn == "showMobileType") {
+                    if (mobileType == "ios") {
+                        alert('현재 기기는 iOS 폰입니다.');
+                    } else if (mobileType == "android") {
+                        alert('현재 기기는 Android 폰입니다.');
+                    } else {
+                        alert('현재 기기를 알수 없습니다.');
+                    }
+                }
+                else if (btn == "getDeviceUUID") {
+                    var action = JSON.stringify({uuid: '', action: 'getDeviceUUID'});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+                else if (btn == "showToastMessage") {
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'showToastMessage', params: ['토스트 메시지 테스트!!']});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+                else if (btn == "reloadOtherTabs") {
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'reloadOtherTabs'});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+                else if (btn == "goToAnotherTab") {
+                    let targetTagId = "f1";  // 하단 탭의 태그값은 순서대로 f0, f1, f2, f3
+                    let targetUrl = "https://www.nate.com";
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'goToAnotherTab', params: [targetTagId, targetUrl]});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+                else if (btn == "showBottomNaviView") {
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'showBottomNaviView'});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+                else if (btn == "hideBottomNaviView") {
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'hideBottomNaviView'});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+                else if (btn == "getPhotoImages") {
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'getPhotoImages'});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
+            }
+            
+            function calledByNative(message) {
+                var data = JSON.parse(message);
+                
+                if (data.action == "getDeviceUUID") {
+                    if (data.isError == false) {
+                        alert(data.result);
+                    }
+                }
+                else if (data.action == "getPhotoImages") {
+                    if (data.isError == false) {
+                        var count = data.result.length;
+                        
+                        for (var i = 0; i < count; i++) {
+                            var imageData = data.result[i];
+                            var imageElement = document.getElementById('image' + (i + 1));
+<!--                            imageElement.src = "data:image/jpeg;base64," + imageData.base64Image;-->
+                            imageElement.src = "data:image/png;base64," + imageData.base64Image;
+                            
+                            var textElement = document.getElementById('photo' + (i + 1) + '_name');
+                            textElement.value = "사진이름: " + imageData.name;
+                        }
+                    }
+                }
+                else {
+<!--                    alert(message);-->
+                }
+                return "complete";
+            }
+        </script>
+    </head>
+    <body>
+        <h1> HTML FILE </h1>
+        Html File을 이용한 웹 페이지<br>
+        
+        <p><a href="https://www.google.com">Google 검색</a>으로 이동</p>
+        <p><a href="javascript:void(0);" onClick="openPopupWindow();">Bing 검색</a>의 새 팝업창</p>
+        
+        <p><a href="tel:010-1234-5678">Tel:010-1234-5678</a> 전화걸기</p>
+        <p><a href="sms:010-1234-5678">Sms:010-1234-5678</a> 문자전송</p>
+        <p><a href="mailto:abc123@abc.com">MailTo:abc123@abc.com</a> 메일전송</p>
+        
+        <br><form>
+            <input type="button" value="스마트폰 종류 출력요청" onClick="buttonClick('showMobileType');">
+            <input type="button" value="기기 고유번호 전달요청" onClick="buttonClick('getDeviceUUID');">
+        </form>
+        <form>
+            <input type="button" value="토스트 메시지 출력요청" onClick="buttonClick('showToastMessage');">
+        </form>
+        <form>
+            <input type="button" value="나머지 웹뷰 리로드" onClick="buttonClick('reloadOtherTabs');">
+            <input type="button" value="탭 이동 및 특정 Url 로드" onClick="buttonClick('goToAnotherTab');">
+        </form>
+        <form>
+            <input type="button" value="하단 탭 영역 보여주기" onClick="buttonClick('showBottomNaviView');">
+            <input type="button" value="하단 탭 영역 숨기기" onClick="buttonClick('hideBottomNaviView');">
+        </form>
+        <form>
+            <input type="button" value="사진 이미지 전달요청" onClick="buttonClick('getPhotoImages');">
+        </form>
+        
+        <table>
+            <tr><td><img id="image1" width="75%" height="auto" style="display:block;"></img></td></tr>
+            <tr><td><textarea id="photo1_name" cols="30" rows="1"></textarea></td></tr>
+            
+            <tr><td><img id="image2" width="75%" height="auto" style="display:block;"></img></td></tr>
+            <tr><td><textarea id="photo2_name" cols="30" rows="1"></textarea></td></tr>
+        </table>
+    </body>
+</html>

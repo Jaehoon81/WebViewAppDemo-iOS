@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PopupWebView" customModule="WebViewAppDemo" customModuleProvider="target">
+            <connections>
+                <outlet property="closeButton" destination="9PK-FP-bse" id="0wf-xR-md0"/>
+                <outlet property="containerView" destination="QDS-iY-bwA" id="MBy-es-815"/>
+                <outlet property="goBackButton" destination="QMW-fs-O9Y" id="1Qi-QY-ewS"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="PopupWebView" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uM5-fB-sUZ" userLabel="HeaderView">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="40"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QMW-fs-O9Y" userLabel="Btn_GoBack">
+                            <rect key="frame" x="0.0" y="0.0" width="49.666666666666664" height="40"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" image="arrow.backward" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="medium"/>
+                                <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </buttonConfiguration>
+                            <connections>
+                                <action selector="onGoBack:" destination="-1" eventType="touchUpInside" id="RlG-Qv-PKt"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9PK-FP-bse" userLabel="Btn_Close">
+                            <rect key="frame" x="346" y="0.0" width="47" height="40"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" image="xmark" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="medium"/>
+                                <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </buttonConfiguration>
+                            <connections>
+                                <action selector="onClose:" destination="-1" eventType="touchUpInside" id="LbN-o9-gVh"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="9PK-FP-bse" secondAttribute="bottom" id="H7y-Nb-lDJ"/>
+                        <constraint firstItem="QMW-fs-O9Y" firstAttribute="top" secondItem="uM5-fB-sUZ" secondAttribute="top" id="U5K-oc-zUq"/>
+                        <constraint firstAttribute="height" constant="40" id="aVN-u6-4Ux"/>
+                        <constraint firstItem="QMW-fs-O9Y" firstAttribute="leading" secondItem="uM5-fB-sUZ" secondAttribute="leading" id="am6-2o-Cxo"/>
+                        <constraint firstItem="9PK-FP-bse" firstAttribute="top" secondItem="uM5-fB-sUZ" secondAttribute="top" id="dM4-QH-dcb"/>
+                        <constraint firstAttribute="trailing" secondItem="9PK-FP-bse" secondAttribute="trailing" id="geb-fp-gS6"/>
+                        <constraint firstAttribute="bottom" secondItem="QMW-fs-O9Y" secondAttribute="bottom" id="v7m-Tx-D0J"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QDS-iY-bwA" userLabel="ContainerView">
+                    <rect key="frame" x="0.0" y="40" width="393" height="812"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="uM5-fB-sUZ" secondAttribute="trailing" id="BNs-Bd-ke0"/>
+                <constraint firstItem="QDS-iY-bwA" firstAttribute="top" secondItem="uM5-fB-sUZ" secondAttribute="bottom" id="Lz2-qs-aUY"/>
+                <constraint firstItem="uM5-fB-sUZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="VRj-TI-eSE"/>
+                <constraint firstItem="uM5-fB-sUZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="beA-6D-wKw"/>
+                <constraint firstAttribute="trailing" secondItem="QDS-iY-bwA" secondAttribute="trailing" id="nzV-DE-BYy"/>
+                <constraint firstItem="QDS-iY-bwA" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="rtU-2t-FuI"/>
+                <constraint firstAttribute="bottom" secondItem="QDS-iY-bwA" secondAttribute="bottom" id="xgV-QY-XjA"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="138" y="20"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow.backward" catalog="system" width="128" height="95"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
