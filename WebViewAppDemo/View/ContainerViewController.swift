@@ -38,6 +38,7 @@ class ContainerViewController: UIViewController, ScrollDelegate {
         super.viewDidLoad()
         print("ContainerViewController:: " + #function + "_\(currentTagId)")
         
+        requestAuthorizations()
         configureNavigationBar()
         
         setupViewControllers()
@@ -71,6 +72,20 @@ class ContainerViewController: UIViewController, ScrollDelegate {
             NotificationCenter.default.removeObserver(otherTabsNotiToken)
             NotificationCenter.default.removeObserver(anotherTabNotiToken)
             NotificationCenter.default.removeObserver(bottomNaviViewNotiToken)
+        }
+    }
+    
+    private func requestAuthorizations() {
+        NotificationManager.shared.requestAuthorization() { granted in
+            if granted == false {
+                DispatchQueue.main.async {
+                    CommonUtils.showSettingsAlert(
+                        targetVC: self,
+                        title: "알림권한 요청", message: "이 앱을 사용하기 위해서는 알림 권한을 허용해야합니다.",
+                        exitFromApp: true)
+                }
+                return
+            }
         }
     }
     
@@ -165,7 +180,7 @@ class ContainerViewController: UIViewController, ScrollDelegate {
     
     private func setupBottomNavigationView() {
         // BottomTab을 눌렀을 때, PageView에 해당 View를 연동
-        bottomNaviView.addSelectListener { [weak self] (sender, index) in
+        bottomNaviView.addSelectListener { [weak self] (sender, index, reloadView) in
             Preferences.shared.setData(key: .bottomTabIndex, value: index)
             print("Selected_BottomTabIndex = \(index)")
             
@@ -177,23 +192,25 @@ class ContainerViewController: UIViewController, ScrollDelegate {
                 self?.navigationController?.isNavigationBarHidden =
                 !(index == 0 || index == 1 || index == 2)
                 // 현재 탭을 다시 눌렀을 때는 해당 웹뷰의 초기 Url로 리로드한다.
-                if "f\(index)" == self?.currentTagId {
-                    if [0, 1, 2].contains(index) {
-                        (targetVC as? WebViewController)?.reloadWebView()
-                    } else {  // 네이티브 화면(f3)일 경우
-                        (targetVC as? NativeViewController)?.refreshNativeView()
+                if reloadView == true {
+                    if "f\(index)" == self?.currentTagId {
+                        if [0, 1, 2].contains(index) {
+                            (targetVC as? WebViewController)?.reloadWebView()
+                        } else {  // 네이티브 화면(f3)일 경우
+                            (targetVC as? NativeViewController)?.refreshNativeView()
+                        }
                     }
                 }
                 self?.currentTagId = "f\(index)"
             }
         }
         if let index = Preferences.shared.getData(key: .bottomTabIndex) {
-            pageViewController.setViewControllers(
-                [viewControllerList[index]], direction: .forward, animated: false, completion: nil)
+//            pageViewController.setViewControllers(
+//                [viewControllerList[index]], direction: .forward, animated: false, completion: nil)
             bottomNaviView.selectBottomTab(index: index)
         } else {
-            pageViewController.setViewControllers(
-                [viewControllerList[0]], direction: .forward, animated: false, completion: nil)
+//            pageViewController.setViewControllers(
+//                [viewControllerList[0]], direction: .forward, animated: false, completion: nil)
             bottomNaviView.selectBottomTab(index: 0)
         }
     }
@@ -236,7 +253,7 @@ class ContainerViewController: UIViewController, ScrollDelegate {
                                 (targetVC as? NativeViewController)?.refreshNativeView()
                             }
                         }
-                        self?.bottomNaviView.selectBottomTab(index: index)
+                        self?.bottomNaviView.selectBottomTab(index: index, reloadView: false)
                     }
                 }
             }

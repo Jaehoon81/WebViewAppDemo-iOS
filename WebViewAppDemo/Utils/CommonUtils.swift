@@ -11,19 +11,58 @@ import WebKit
 
 class CommonUtils {
     
-    public static func showAlert(targetVC: UIViewController?, title: String = "알림", message: String, completion: (() -> Void)? = nil) {
+    internal static func getApplicationVersion() -> String {
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    }
+    
+    internal static func getBuildVersion() -> String {
+        return Bundle.main.infoDictionary?["CFBundleVersion"] as! String
+    }
+    
+    public static func showAlert(
+        targetVC: UIViewController?, title: String = "알림", message: String,
+        completion: (() -> Void)? = nil
+    ) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .default) {
             (action: UIAlertAction) -> Void in
-            if let completion = completion {
-                completion()
-            }
+            if let completion = completion { completion() }
         }
         alertController.addAction(confirmAction)
         targetVC?.present(alertController, animated: true, completion: nil)
     }
     
-    public static func showNetworkAlert(targetVC: UIViewController?, targetWebView: WKWebView, failedUrl: URL?) {
+    public static func showSettingsAlert(
+        targetVC: UIViewController?, title: String = "알림", message: String,
+        exitFromApp: Bool = false
+    ) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let finishAction = UIAlertAction(title: "종료", style: .destructive) {
+            (action: UIAlertAction) -> Void in
+            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { exit(0) }
+        }
+        let settingsAction = UIAlertAction(title: "설정", style: .default) {
+            (action: UIAlertAction) -> Void in
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+                if exitFromApp == true {
+                    UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { exit(0) }
+                }
+            }
+        }
+        alertController.addAction(finishAction)
+        alertController.addAction(settingsAction)
+        targetVC?.present(alertController, animated: true, completion: nil)
+    }
+    
+    public static func showNetworkAlert(
+        targetVC: UIViewController?, targetWebView: WKWebView, failedUrl: URL?
+    ) {
         print(#function + " withFailedUrl: \(failedUrl!)")
         
         let alertController = UIAlertController(title: "알림", message: "인터넷 접속 상태를 확인해주세요!", preferredStyle: .alert)
@@ -34,9 +73,7 @@ class CommonUtils {
         }
         let confirmAction = UIAlertAction(title: "확인", style: .default) {
             (action: UIAlertAction) -> Void in
-            if targetWebView.canGoBack {
-                targetWebView.goBack()
-            }
+            if targetWebView.canGoBack { targetWebView.goBack() }
         }
         alertController.addAction(retryAction)
         alertController.addAction(confirmAction)

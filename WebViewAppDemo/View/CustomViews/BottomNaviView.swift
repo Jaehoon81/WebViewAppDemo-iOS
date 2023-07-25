@@ -33,7 +33,8 @@ class BottomNaviView: UIView {
     
     private var selectedIndex: Int = 0
     
-    public typealias SelectionHandler = (_ sender: BottomNaviView, _ index: Int) -> ()
+    public typealias SelectionHandler =
+    (_ sender: BottomNaviView, _ index: Int, _ reloadView: Bool) -> ()
     private var selectionHandler: SelectionHandler?
     
     func addSelectListener(handler: @escaping SelectionHandler) {
@@ -102,7 +103,7 @@ class BottomNaviView: UIView {
         }
     }
     
-    func selectBottomTab(index: Int) {
+    func selectBottomTab(index: Int, reloadView: Bool = true) {
         guard index >= 0 else { return }
         selectedIndex = index
         
@@ -123,6 +124,6 @@ class BottomNaviView: UIView {
         }
         labelArr[index]?.textColor = .systemIndigo
         
-        selectionHandler?(self, selectedIndex)
+        selectionHandler?(self, selectedIndex, reloadView)
     }
 }

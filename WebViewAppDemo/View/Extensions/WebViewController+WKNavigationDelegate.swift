@@ -37,30 +37,50 @@ extension WebViewController: WKNavigationDelegate {
         
         // 네이티브 요청 링크(=비 웹 페이지) 처리
         if !scheme.elementsEqual("http") && !scheme.elementsEqual("https") {
+            if scheme == "about" {
+                // 빈 페이지(about:blank)를 로드하려는 경우, 무시하고 리턴
+                decisionHandler(.cancel)
+                return
+            }
             // Case 1. tel, sms, mailto 등의 링크는 기본 내장된 앱을 실행
             if ["tel", "sms", "mailto", "facetime"].contains(scheme) {
                 let targetUrlStr = requestUrlStr.components(separatedBy: ":")
-                if let targetUrl = NSURL(string: "\(scheme)://\(targetUrlStr[1])") {
+                if targetUrlStr.count >= 2,
+                    let targetUrl = NSURL(string: "\(scheme)://\(targetUrlStr[1])") {
                     
                     if UIApplication.shared.canOpenURL(targetUrl as URL) {
-                        UIApplication.shared.open(targetUrl as URL, options: [:]) { (isOpened) -> Void in
-                            print("\(scheme) app is opened.")
+                        UIApplication.shared.open(targetUrl as URL, options: [:]) {
+                            (isOpened) -> Void in
+                            print("\(scheme): App is opened.")
                         }
                     }
                 }
             }
-            // Case 2. isp, payco, bankpay 결제 서비스 앱은 미설치 시, 아래와 같이 추가 처리가 필요
-            // 나머지 앱들은 미설치 시, else 구문에서 해당 앱 스토어로 이동
-            else if scheme == "ispmobile" && !UIApplication.shared.canOpenURL(requestUrl) {
-                openUrl(URL(string: "http://itunes.apple.com/kr/app/id369125087?mt=8")!)
-            } else if scheme == "payco" && !UIApplication.shared.canOpenURL(requestUrl) {
-                openUrl(URL(string: "http://itunes.apple.com/kr/app/id924292102?mt=8")!)
-            } else if scheme == "kftc-bankpay" && !UIApplication.shared.canOpenURL(requestUrl) {
-                openUrl(URL(string: "http://itunes.apple.com/us/app/id398456030?mt=8")!)
-            }
-            // Case 3. 그 밖의 기타 요청은 requestUrl을 그대로 호출
+            // Case 2. 그 밖의 요청은 requestUrl을 그대로 호출 (예: 결제 서비스 앱)
+            // - 특정 DeepLink(=URLScheme) 스킴의 경우, 해당 앱으로 이동
+            // - UniversalLink(Https로 시작) 스킴인 경우, 서버로부터 Redirect를 통해 여기서 처리
             else {
-                openUrl(requestUrl)
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                    UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                } else {
+                    // 결제 서비스 앱은 미설치 시 해당 앱 스토어로 이동
+                    if let appStoreUrlStr = Constants.AppStore.urlDictionary[scheme], !appStoreUrlStr.isEmpty {
+                        if let appStoreUrl = NSURL(string: appStoreUrlStr) {
+                            
+                            if UIApplication.shared.canOpenURL(appStoreUrl as URL) {
+                                UIApplication.shared.open(appStoreUrl as URL, options: [:]) {
+                                    (isOpened) -> Void in
+                                    print("\(scheme): AppStore is opened.")
+                                }
+                            }
+                        }
+                    } else {
+                        print("\(scheme): AppStore URL could not be found.")
+                        DispatchQueue.main.async {
+                            CommonUtils.showAlert(targetVC: self, message: "해당 앱 스토어로 이동할 수 없습니다.")
+                        }
+                    }
+                }
             }
             decisionHandler(.cancel)
             return

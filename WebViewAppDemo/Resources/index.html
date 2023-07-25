@@ -73,7 +73,7 @@
                 }
                 else if (btn == "goToAnotherTab") {
                     let targetTagId = "f1";  // 하단 탭의 태그값은 순서대로 f0, f1, f2, f3
-                    let targetUrl = "https://www.nate.com";
+                    let targetUrl = "https://m.nate.com";
                     var action = JSON.stringify({uuid: getUuidV4(), action: 'goToAnotherTab', params: [targetTagId, targetUrl]});
                     
                     if (mobileType == "ios") {
@@ -151,6 +151,8 @@
         <p><a href="tel:010-1234-5678">Tel:010-1234-5678</a> 전화걸기</p>
         <p><a href="sms:010-1234-5678">Sms:010-1234-5678</a> 문자전송</p>
         <p><a href="mailto:abc123@abc.com">MailTo:abc123@abc.com</a> 메일전송</p>
+        
+        <p><a href="myapp://webviewappdemo?target=1&url=m.nate.com">WebViewAppDemo</a> 호출하기</p>
         
         <br><form>
             <input type="button" value="스마트폰 종류 출력요청" onClick="buttonClick('showMobileType');">

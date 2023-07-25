@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2515E6B82A29E977005E35E3 /* WebViewProcessPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2515E6B72A29E977005E35E3 /* WebViewProcessPool.swift */; };
+		2519B46D2A6E618B004128A0 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2519B46C2A6E618B004128A0 /* NetworkMonitor.swift */; };
+		2519B46F2A6E8842004128A0 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2519B46E2A6E8842004128A0 /* NotificationManager.swift */; };
 		2520630C2A1F500B00943D0C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2520630B2A1F500B00943D0C /* Constants.swift */; };
 		25259DF32A1B377000809003 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25259DF22A1B377000809003 /* AppDelegate.swift */; };
 		25259DF52A1B377000809003 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25259DF42A1B377000809003 /* SceneDelegate.swift */; };
@@ -44,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		2515E6B72A29E977005E35E3 /* WebViewProcessPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewProcessPool.swift; sourceTree = "<group>"; };
+		2519B46C2A6E618B004128A0 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		2519B46E2A6E8842004128A0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2520630B2A1F500B00943D0C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		25259DEF2A1B377000809003 /* WebViewAppDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebViewAppDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25259DF22A1B377000809003 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -216,6 +220,8 @@
 			children = (
 				25D3C0E02A303FDE008D37E5 /* CommonUtils.swift */,
 				2520630B2A1F500B00943D0C /* Constants.swift */,
+				2519B46C2A6E618B004128A0 /* NetworkMonitor.swift */,
+				2519B46E2A6E8842004128A0 /* NotificationManager.swift */,
 				25EF897A2A25D8E1001EED79 /* Preferences.swift */,
 			);
 			path = Utils;
@@ -403,6 +409,7 @@
 				25C01CD42A2871B800269D9B /* ScrollDelegate.swift in Sources */,
 				25259E0E2A1B4DE700809003 /* ContainerViewController.swift in Sources */,
 				25E2FEC12A40405C0022EF89 /* EmployeeTableViewDataSource.swift in Sources */,
+				2519B46D2A6E618B004128A0 /* NetworkMonitor.swift in Sources */,
 				25F3CBAD2A2DB83800BEF802 /* WebViewController+WKUIDelegate.swift in Sources */,
 				25E2FEC72A404FB40022EF89 /* APIError.swift in Sources */,
 				25F050F12A3AE89200BC0A43 /* ResultPhoto.swift in Sources */,
@@ -413,6 +420,7 @@
 				25F3CBB12A2DB88100BEF802 /* WebViewController+WKScriptMessageHandler.swift in Sources */,
 				25259E102A1B4FCD00809003 /* WebViewController.swift in Sources */,
 				259F57E72A43DEAE00B466D8 /* MainViewModel.swift in Sources */,
+				2519B46F2A6E8842004128A0 /* NotificationManager.swift in Sources */,
 				25E2FEBF2A403B9E0022EF89 /* Employee.swift in Sources */,
 				2585AE0E2A3824A20048F22C /* EmployeeTableViewCell.swift in Sources */,
 				25259E142A1B5ED000809003 /* BottomNaviView.swift in Sources */,
