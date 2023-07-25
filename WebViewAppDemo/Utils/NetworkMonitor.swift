@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import Network
 
-@available(iOS 12.0, *)
 final class NetworkMonitor {
     
     enum ConnectionType {

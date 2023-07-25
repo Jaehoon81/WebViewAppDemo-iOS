@@ -62,6 +62,15 @@
                         window.android.callNative(action);
                     }
                 }
+                else if (btn == "showNotiMessage") {
+                    var action = JSON.stringify({uuid: getUuidV4(), action: 'showNotiMessage', params: ['노티 메시지 테스트!!', '노티 메시지 테스트입니다.']});
+                    
+                    if (mobileType == "ios") {
+                        window.webkit.messageHandlers.callNative.postMessage(action);
+                    } else if (mobileType == "android") {
+                        window.android.callNative(action);
+                    }
+                }
                 else if (btn == "reloadOtherTabs") {
                     var action = JSON.stringify({uuid: getUuidV4(), action: 'reloadOtherTabs'});
                     
@@ -160,6 +169,7 @@
         </form>
         <form>
             <input type="button" value="토스트 메시지 출력요청" onClick="buttonClick('showToastMessage');">
+            <input type="button" value="노티 메시지 출력요청" onClick="buttonClick('showNotiMessage');">
         </form>
         <form>
             <input type="button" value="나머지 웹뷰 리로드" onClick="buttonClick('reloadOtherTabs');">

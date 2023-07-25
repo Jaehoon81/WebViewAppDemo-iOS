@@ -11,6 +11,7 @@ enum ActionCode: String {
     
     case getDeviceUUID = "getDeviceUUID"
     case showToastMessage = "showToastMessage"
+    case showNotiMessage = "showNotiMessage"
     case reloadOtherTabs = "reloadOtherTabs"
     case goToAnotherTab = "goToAnotherTab"
     case showBottomNaviView = "showBottomNaviView"

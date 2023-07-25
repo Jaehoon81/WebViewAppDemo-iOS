@@ -25,6 +25,8 @@ extension WebViewController: WKScriptMessageHandler {
                         processGetDeviceUUID(request.uuid, request.action)
                     case ActionCode.showToastMessage.rawValue:
                         processShowToastMessage(request.uuid, request.action, request.params)
+                    case ActionCode.showNotiMessage.rawValue:
+                        processShowNotiMessage(request.uuid, request.action, request.params)
                     case ActionCode.reloadOtherTabs.rawValue:
                         processReloadOtherTabs(request.uuid, request.action)
                     case ActionCode.goToAnotherTab.rawValue:
@@ -87,6 +89,25 @@ extension WebViewController: WKScriptMessageHandler {
         snackBarMessage.text = params[0]
         MDCSnackbarManager.default.show(snackBarMessage)
         
+        let resultData = ResultDefault(uuid: uuid, action: action, result: params[0], isError: false)
+        let resultJsonStr = encodeJson(data: resultData) ??
+        toErrorJson(uuid: uuid, action: action, error: ErrorCode.jsonDataFailure)
+        callJavaScript(resultJsonStr)
+    }
+    
+    // 노티 메시지를 화면에 노출한다.
+    private func processShowNotiMessage(_ uuid: String?, _ action: String, _ params: [String]?) {
+        guard let params = params, !params.isEmpty else {
+            let resultJsonStr = toErrorJson(uuid: uuid, action: action, error: ErrorCode.invalidParameter)
+            callJavaScript(resultJsonStr)
+            return
+        }
+        NotificationManager.shared.showNotification(title: params[0], body: params[1]) {
+            errorMessage in
+            if let errorMessage = errorMessage {
+                print(#function + " withError: \(errorMessage)")
+            }
+        }
         let resultData = ResultDefault(uuid: uuid, action: action, result: params[0], isError: false)
         let resultJsonStr = encodeJson(data: resultData) ??
         toErrorJson(uuid: uuid, action: action, error: ErrorCode.jsonDataFailure)

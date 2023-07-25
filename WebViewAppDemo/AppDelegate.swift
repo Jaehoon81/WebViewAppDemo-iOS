@@ -5,14 +5,20 @@
 //  Created by 정재훈 on 2023/05/22.
 //
 
+import Foundation
 import UIKit
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        UNUserNotificationCenter.current().delegate = self
+        
         NetworkMonitor.shared.startMonitoring()
         return true
     }
@@ -66,5 +72,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    // 앱이 Foreground 상태일 때, Notification을 수신하면 호출된다.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        let identifier = notification.request.identifier
+        if identifier.contains(NotificationManager.notificationID) {
+            let userInfo = notification.request.content.userInfo
+            print("UserInfo = \(userInfo)")
+        }
+        if #available(iOS 14.0, *) {
+            completionHandler([.list, .banner])
+        } else {
+            completionHandler([.alert])
+        }
+    }
+    
+    // Notification을 수신한 후, 알림을 누르면 호출된다.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        guard let rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else {
+            print("RootViewController could not be found.")
+            
+            completionHandler()
+            return
+        }
+        // 알림을 눌렀을 때, 필요한 로직구현 (특정 화면으로 이동)
+        let identifier = response.notification.request.identifier
+        if identifier.contains(NotificationManager.notificationID) {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let containerVC = storyboard.instantiateViewController(withIdentifier: "ContainerView") as? ContainerViewController,
+                let navigationController = rootViewController as? UINavigationController {
+                
+                let userInfo = response.notification.request.content.userInfo
+                print("UserInfo = \(userInfo)")
+                
+                // showNotification() 함수 호출 시에 전달한 값이 있다면 주석을 해제하고, 필요한 로직을 작성한다.
+//                if let _ = userInfo[""] as? String {
+//                    containerVC. =
+//                }
+//                navigationController.pushViewController(containerVC, animated: true)
+            }
+        }
+        completionHandler()
     }
 }

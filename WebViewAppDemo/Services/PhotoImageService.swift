@@ -54,7 +54,7 @@ class PhotoImageService: NSObject {
     }
     
     private func requestAuthorization(targetVC: UIViewController, completion: @escaping (PhotoImageService, Bool) -> ()) {
-        if #available(iOS 14, *) {
+        if #available(iOS 14.0, *) {
             PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
                 processAuthorization(status: status)
             }

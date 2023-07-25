@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import UIKit
 import UserNotifications
 
-class NotificationManager {
+final class NotificationManager {
     
     static let notificationID = "notificationID"
     
@@ -34,7 +35,7 @@ class NotificationManager {
     }
     
     func showNotification(
-        title: String, subtitle: String? = nil, body: String, userInfo: [AnyHashable: Any]? = nil,
+        title: String, subtitle: String? = nil, body: String? = nil, userInfo: [AnyHashable: Any]? = nil,
         errorHandler: ((String?) -> Void)? = nil
     ) {
         userNotiCenter.getNotificationSettings() { [weak self] (settings) in
@@ -46,7 +47,7 @@ class NotificationManager {
                 let content = UNMutableNotificationContent()
                 content.title = title
                 if subtitle != nil { content.subtitle = subtitle! }
-                content.body = "\n" + body
+                if body != nil { content.body = body! }
                 if userInfo != nil { content.userInfo = userInfo! }
                 content.sound = .default
                 content.badge = 1
