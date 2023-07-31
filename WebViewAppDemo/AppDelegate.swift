@@ -109,13 +109,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             if let containerVC = storyboard.instantiateViewController(withIdentifier: "ContainerView") as? ContainerViewController,
                 let navigationController = rootViewController as? UINavigationController {
                 
+                // showNotification() 함수 호출 시 전달한 값을 ContainerVC에 넘기려면 아래 주석을 해제한다.
                 let userInfo = response.notification.request.content.userInfo
-                print("UserInfo = \(userInfo)")
-                
-                // showNotification() 함수 호출 시에 전달한 값이 있다면 주석을 해제하고, 필요한 로직을 작성한다.
-//                if let _ = userInfo[""] as? String {
-//                    containerVC. =
-//                }
+                if let title = userInfo["title"] as? String {
+                    print("UserInfo_Title: \(title)")
+//                    containerVC._ = title
+                }
+                if let body = userInfo["body"] as? String {
+                    print("UserInfo_Body: \(body)")
+//                    containerVC._ = body
+                }
 //                navigationController.pushViewController(containerVC, animated: true)
             }
         }

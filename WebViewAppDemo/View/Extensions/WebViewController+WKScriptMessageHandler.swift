@@ -102,7 +102,10 @@ extension WebViewController: WKScriptMessageHandler {
             callJavaScript(resultJsonStr)
             return
         }
-        NotificationManager.shared.showNotification(title: params[0], body: params[1]) {
+        let body: String? = (params.count == 1) ? nil : params[1]
+        let userInfo: [AnyHashable: Any]? = (params.count == 1) ?
+            ["title": params[0]] : ["title": params[0], "body": params[1]]
+        NotificationManager.shared.showNotification(title: params[0], body: body, userInfo: userInfo) {
             errorMessage in
             if let errorMessage = errorMessage {
                 print(#function + " withError: \(errorMessage)")
